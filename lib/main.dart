@@ -49,7 +49,14 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           } else if (snapshot.hasData) { // Check if data is available
             return Center(
-              child: GridBebidas(bebidas: snapshot.data),
+              child: GridBebidas(
+                bebidas: snapshot.data,
+                onBebidaClicked: (nombre) {
+                  setState(() {
+                    _selectedIngredient = nombre;
+                  });
+                },
+              ),
             );
           } else {
             return const Center(child: Text('No hay datos disponibles'));
@@ -70,7 +77,14 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           } else if (snapshot.hasData) { // Check if data is available
             return Center(
-              child: GridBebidas(bebidas: snapshot.data),
+              child: GridBebidas(
+                bebidas: snapshot.data,
+                onBebidaClicked: (nombre) {
+                  setState(() {
+                    _selectedIngredient = nombre;
+                  });
+                },
+              ),
             );
           } else {
             return const Center(child: Text('No hay datos disponibles'));

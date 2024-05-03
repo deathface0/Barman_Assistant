@@ -3,17 +3,16 @@ import 'bebida.dart';
 
 class MiniaturaBebida extends StatelessWidget {
   final Bebida bebida;
-  const MiniaturaBebida({super.key, required this.bebida});
+  final VoidCallback onTap;
+
+  const MiniaturaBebida({super.key, required this.bebida, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: GestureDetector(
-        onTap: () {
-          // Handle the click event here
-          print(bebida.nombre); // For example, print the name of the clicked beverage
-        },
+        onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

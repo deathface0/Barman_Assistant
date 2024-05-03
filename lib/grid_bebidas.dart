@@ -4,7 +4,9 @@ import 'bebida.dart';
 
 class GridBebidas extends StatelessWidget {
   final List<Bebida> bebidas;
-  const GridBebidas({super.key, required this.bebidas});
+  final Function(String) onBebidaClicked;
+
+  const GridBebidas({super.key, required this.bebidas, required this.onBebidaClicked});
 
   bool isIngredient() => bebidas.isNotEmpty && bebidas.first.id == 'Unknown';
   int axisCount(bool isIngredient, Orientation orientation)
@@ -28,7 +30,10 @@ class GridBebidas extends StatelessWidget {
             mainAxisExtent: 136,
           ),
           itemBuilder: (context, index) {
-            return MiniaturaBebida(bebida: bebidas[index]);
+            return MiniaturaBebida(
+              bebida: bebidas[index],
+              onTap: () => onBebidaClicked(bebidas[index].nombre),
+            );
           },
           itemCount: bebidas.length,
         );

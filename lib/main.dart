@@ -35,49 +35,69 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Map<String, dynamic>? _horizontal;
-  Map<String, dynamic>? _vertical;
-
-  /*void fillHorizontal(String endpoint) async {
-    Map<String, dynamic>? json = await BarManager.instance.fetchData(endpoint);
-    setState(() {
-      _horizontal = json;
-    });
-  }
-
-  void fillVertical(String endpoint) async {
-    Map<String, dynamic>? json = await BarManager.instance.fetchData(endpoint);
-    setState(() {
-      _vertical = json;
-    });
-  }*/
+  String _selectedIngredient = 'Rum';
 
   @override
   Widget build(BuildContext context) {
+    final future1 = FutureBuilder(
+      future: BarManager.instance.getIngredientes(),
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('No se puede conectar con el servidor'),
+            );
+          } else if (snapshot.hasData) { // Check if data is available
+            return Center(
+              child: GridBebidas(bebidas: snapshot.data),
+            );
+          } else {
+            return const Center(child: Text('No hay datos disponibles'));
+          }
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+
+    final future2 = FutureBuilder(
+      future: BarManager.instance.getBebidas(_selectedIngredient),
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('No se puede conectar con el servidor'),
+            );
+          } else if (snapshot.hasData) { // Check if data is available
+            return Center(
+              child: GridBebidas(bebidas: snapshot.data),
+            );
+          } else {
+            return const Center(child: Text('No hay datos disponibles'));
+          }
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text(widget.title),
       ),
-      body: FutureBuilder(
-        future: BarManager.instance.getBebidas(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('No se puede conectar con el servidor'),
-              );
-            } else if (snapshot.hasData) { // Check if data is available
-              return Center(
-                child: GridBebidas(bebidas: snapshot.data),
-              );
-            } else {
-              return const Center(child: Text('No hay datos disponibles'));
-            }
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 1, // Adjust the flex value as needed
+            child: future1,
+          ),
+          Expanded(
+            flex: 4, // Adjust the flex value as needed
+            child: future2,
+          ),
+        ],
       ),
     );
   }

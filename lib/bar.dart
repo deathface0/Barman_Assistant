@@ -21,8 +21,8 @@ class BarManager {
     }
   }
 
-  Future<List<Bebida>> getBebidas() async {
-    final stringResponse = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Vodka');
+  Future<List<Bebida>> getBebidas(String ingrediente) async {
+    final stringResponse = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=$ingrediente');
     final Map<String, dynamic> json = jsonDecode(stringResponse);
     if (json['drinks'] != null) {
       final bebidas = <Bebida>[];
@@ -32,6 +32,20 @@ class BarManager {
       return bebidas;
     } else {
     return [];
+    }
+  }
+
+  Future<List<Bebida>> getIngredientes() async {
+    final stringResponse = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list');
+    final Map<String, dynamic> json = jsonDecode(stringResponse);
+    if (json['drinks'] != null) {
+      final bebidas = <Bebida>[];
+      for (var bebida in json['drinks']) {
+        bebidas.add(Bebida.desdeJson(bebida));
+      }
+      return bebidas;
+    } else {
+      return [];
     }
   }
 }

@@ -6,13 +6,25 @@ class GridBebidas extends StatelessWidget {
   final List<Bebida> bebidas;
   const GridBebidas({super.key, required this.bebidas});
 
+  bool isIngredient() => bebidas.isNotEmpty && bebidas.first.id == 'Unknown';
+  int axisCount(bool isIngredient, Orientation orientation)
+  {
+    if (isIngredient)
+    {
+      return 1;
+    } else {
+      return orientation == Orientation.portrait ? 2 : 4;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return OrientationBuilder(
       builder: (context, orientation) {
         return GridView.builder(
+          scrollDirection: isIngredient() ? Axis.horizontal : Axis.vertical,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+            crossAxisCount: axisCount(isIngredient(), orientation),
             mainAxisExtent: 136,
           ),
           itemBuilder: (context, index) {

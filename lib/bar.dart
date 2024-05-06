@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:barman_assistant/bebida.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
@@ -46,6 +47,17 @@ class BarManager {
       return bebidas;
     } else {
       return [];
+    }
+  }
+
+  Future<Bebida> getBebida(String nombre) async {
+    final stringResponse = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=$nombre');
+    final Map<String, dynamic> json = jsonDecode(stringResponse);
+    if (json['drinks'] != null && json['drinks'] is List) {
+      final Bebida bebida = Bebida.desdeJson(json['drinks'][0]);
+      return bebida;
+    } else {
+      return Bebida(id: '', nombre: '', urlImagen: '', instrucciones: '', alcohol: '');
     }
   }
 }

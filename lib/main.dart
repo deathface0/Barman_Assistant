@@ -1,8 +1,8 @@
 import 'package:barman_assistant/grid_bebidas.dart';
 import 'package:flutter/material.dart';
 import 'bar.dart';
+import 'view_bebida.dart';
 import 'bebida.dart';
-import 'miniatura.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _selectedIngredient = 'Rum';
+  String _selectedDrink = 'None';
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 bebidas: snapshot.data,
                 onBebidaClicked: (nombre) {
                   setState(() {
-                    _selectedIngredient = nombre;
+                    _selectedDrink = nombre;
+
+                    // Navigate to the second page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewBebida(nombre: nombre),
+                      ),
+                    );
                   });
                 },
               ),

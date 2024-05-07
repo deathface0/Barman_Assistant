@@ -21,8 +21,9 @@ class BarManager {
     }
   }
 
-  Future<List<Bebida>> getBebidas(String ingrediente) async {
-    String endpoint = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=$ingrediente';
+  Future<List<Bebida>> getBebidas(String ingrediente, String categoria) async {
+    String endpoint = ingrediente != 'None' ? 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=$ingrediente' :
+                                              'https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=$categoria';
     final stringResponse = await fetchData(endpoint);
     final Map<String, dynamic> json = jsonDecode(stringResponse);
     if (json['drinks'] != null) {
@@ -32,12 +33,13 @@ class BarManager {
       }
       return bebidas;
     } else {
-    return [];
+      return [];
     }
   }
 
   Future<List<Bebida>> getIngredientes() async {
-    final stringResponse = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list');
+    final stringResponse = await fetchData(
+        'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list');
     final Map<String, dynamic> json = jsonDecode(stringResponse);
     if (json['drinks'] != null) {
       final bebidas = <Bebida>[];
@@ -51,7 +53,8 @@ class BarManager {
   }
 
   Future<Bebida> getBebida(String nombre) async {
-    final stringResponse = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=$nombre');
+    final stringResponse = await fetchData(
+        'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=$nombre');
     final Map<String, dynamic> json = jsonDecode(stringResponse);
     if (json['drinks'] != null && json['drinks'] is List) {
       final Bebida bebida = Bebida.desdeJson(json['drinks'][0]);
@@ -62,17 +65,21 @@ class BarManager {
   }
 
   Future<List<String>> getCategorias() async {
-    String endpoint = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
-    final stringResponse = await fetchData(endpoint);
-    final Map<String, dynamic> json = jsonDecode(stringResponse);
-    if (json['drinks'] != null) {
-      final categorias = <String>[];
-      for (var categoria in json['drinks']) {
-        categorias.add(categoria);
+    try {
+      String endpoint = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
+      final stringResponse = await fetchData(endpoint);
+      final Map<String, dynamic> json = jsonDecode(stringResponse);
+      if (json['drinks'] != null && json['drinks'] is List) {
+        final categorias = <String>[];
+        for (var categoria in json['drinks']) {
+          categorias.add(categoria['strCategory']);
+        }
+        return categorias;
+      } else {
+        throw Exception('La respuesta de la API no tiene el formato esperado');
       }
-      return categorias;
-    } else {
-      return [];
+    } catch (e) {
+      throw Exception('Error al obtener las categorías: $e');
     }
   }
 }

@@ -36,18 +36,18 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Bebida> ingredients = <Bebida>[];
-  List<String> filters = <String>[];
-
   String _selectedIngredient = 'Rum';
   String _selectedDrink = 'None';
-  String filter = 'None';
+
+  List<String> filters = <String>[];
+  String _filter = 'None';
 
   @override
   void initState() {
     super.initState();
-
     BarManager.instance.getCategorias().then((categorias) {
       setState(() {
+        categorias.insert(0, 'None');
         filters = categorias;
       });
     });
@@ -61,19 +61,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final ing = Center(
+    final ingredientes = Center(
       child: GridBebidas(
         bebidas: ingredients,
         onBebidaClicked: (nombre) {
           setState(() {
             _selectedIngredient = nombre;
+            _filter = 'None';
           });
         },
       ),
     );
 
-    final future2 = FutureBuilder(
-      future: BarManager.instance.getBebidas(_selectedIngredient),
+    final bebidas = FutureBuilder(
+      future: BarManager.instance.getBebidas(_selectedIngredient, _filter),
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -108,6 +109,29 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
 
+    final filtros = Center(
+      child: DropdownButton(
+        // Initial Value
+        value: _filter,
+        icon: const Icon(Icons.keyboard_arrow_down),
+        isExpanded: true,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        items: filters.map((String dropdownvalue) {
+          return DropdownMenuItem(
+            value: dropdownvalue,
+            child: Text(dropdownvalue),
+          );
+        }).toList(),
+        hint: const Text('Filter'),
+        onChanged: (String? newValue) {
+          setState(() {
+            _selectedIngredient = 'None';
+            _filter = newValue!;
+          });
+        },
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -118,15 +142,15 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Expanded(
             flex: 1, // Adjust the flex value as needed
-            child: ing,
+            child: ingredientes,
           ),
           Expanded(
             flex: 0,
-            child: const Text(''),
+            child: filtros,
           ),
           Expanded(
             flex: 3, // Adjust the flex value as needed
-            child: future2,
+            child: bebidas,
           ),
         ],
       ),

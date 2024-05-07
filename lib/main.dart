@@ -40,14 +40,14 @@ class _MyHomePageState extends State<MyHomePage> {
   String _selectedDrink = 'None';
 
   List<String> filters = <String>[];
-  String _filter = 'None';
+  String _filter = 'Ingredient';
 
   @override
   void initState() {
     super.initState();
     BarManager.instance.getCategorias().then((categorias) {
       setState(() {
-        categorias.insert(0, 'None');
+        categorias.insert(0, 'Ingredient');
         filters = categorias;
       });
     });
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onBebidaClicked: (nombre) {
           setState(() {
             _selectedIngredient = nombre;
-            _filter = 'None';
+            _filter = 'Ingredient';
           });
         },
       ),
@@ -125,8 +125,10 @@ class _MyHomePageState extends State<MyHomePage> {
         hint: const Text('Filter'),
         onChanged: (String? newValue) {
           setState(() {
-            _selectedIngredient = 'None';
-            _filter = newValue!;
+            if (newValue != 'Ingredient') {
+              _selectedIngredient = 'None';
+            }
+            _filter = newValue! != 'Ingredient' ? newValue! : _filter;
           });
         },
       ),

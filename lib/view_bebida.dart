@@ -45,14 +45,19 @@ class ViewBebida extends StatelessWidget {
                 const SizedBox(height: 20), // Add spacing between image and text
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0), // Set left and right padding
-                  child: Text(
-                    _bebida.instrucciones,
-                    textAlign: TextAlign.justify, // Set text alignment to justify
-                    style: const TextStyle(
-                      fontSize: 20, // Adjust the font size as needed
-                      fontWeight: FontWeight.normal, // Adjust the font weight as needed
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.3, // Limita la altura al 50% del tamaño de la pantalla
+                    child: SingleChildScrollView(
+                      child: Text(
+                        _bebida.instrucciones,
+                        textAlign: TextAlign.justify,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
                     ),
-                  ),
+                  )
                 ),
               ],
             );

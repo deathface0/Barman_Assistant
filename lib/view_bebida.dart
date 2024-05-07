@@ -7,7 +7,7 @@ class ViewBebida extends StatelessWidget {
   Bebida _bebida;
 
   ViewBebida({super.key, required this.nombre}) :
-        _bebida = Bebida(id: '', nombre: nombre, urlImagen: '', instrucciones: '', alcohol: '');
+        _bebida = Bebida(id: '', nombre: nombre, urlImagen: '', instrucciones: '');
 
   @override
   Widget build(BuildContext context) {

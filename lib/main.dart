@@ -1,4 +1,4 @@
-import 'package:barman_assistant/grid_bebidas.dart';
+import 'grid_bebidas.dart';
 import 'package:flutter/material.dart';
 import 'bar.dart';
 import 'view_bebida.dart';
@@ -35,37 +35,41 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Bebida> ingredients = <Bebida>[];
+  List<String> filters = <String>[];
+
   String _selectedIngredient = 'Rum';
   String _selectedDrink = 'None';
+  String filter = 'None';
+
+  @override
+  void initState() {
+    super.initState();
+
+    BarManager.instance.getCategorias().then((categorias) {
+      setState(() {
+        filters = categorias;
+      });
+    });
+
+    BarManager.instance.getIngredientes().then((ingredientes) {
+      setState(() {
+        ingredients = ingredientes;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final future1 = FutureBuilder(
-      future: BarManager.instance.getIngredientes(),
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('No se puede conectar con el servidor'),
-            );
-          } else if (snapshot.hasData) { // Check if data is available
-            return Center(
-              child: GridBebidas(
-                bebidas: snapshot.data,
-                onBebidaClicked: (nombre) {
-                  setState(() {
-                    _selectedIngredient = nombre;
-                  });
-                },
-              ),
-            );
-          } else {
-            return const Center(child: Text('No hay datos disponibles'));
-          }
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
+    final ing = Center(
+      child: GridBebidas(
+        bebidas: ingredients,
+        onBebidaClicked: (nombre) {
+          setState(() {
+            _selectedIngredient = nombre;
+          });
+        },
+      ),
     );
 
     final future2 = FutureBuilder(
@@ -114,10 +118,14 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Expanded(
             flex: 1, // Adjust the flex value as needed
-            child: future1,
+            child: ing,
           ),
           Expanded(
-            flex: 4, // Adjust the flex value as needed
+            flex: 0,
+            child: const Text(''),
+          ),
+          Expanded(
+            flex: 3, // Adjust the flex value as needed
             child: future2,
           ),
         ],

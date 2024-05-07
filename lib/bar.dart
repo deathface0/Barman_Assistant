@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:barman_assistant/bebida.dart';
-import 'package:flutter/material.dart';
+import 'bebida.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
@@ -23,7 +22,8 @@ class BarManager {
   }
 
   Future<List<Bebida>> getBebidas(String ingrediente) async {
-    final stringResponse = await fetchData('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=$ingrediente');
+    String endpoint = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=$ingrediente';
+    final stringResponse = await fetchData(endpoint);
     final Map<String, dynamic> json = jsonDecode(stringResponse);
     if (json['drinks'] != null) {
       final bebidas = <Bebida>[];
@@ -57,7 +57,22 @@ class BarManager {
       final Bebida bebida = Bebida.desdeJson(json['drinks'][0]);
       return bebida;
     } else {
-      return Bebida(id: '', nombre: '', urlImagen: '', instrucciones: '', alcohol: '');
+      return Bebida(id: '', nombre: '', urlImagen: '', instrucciones: '');
+    }
+  }
+
+  Future<List<String>> getCategorias() async {
+    String endpoint = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
+    final stringResponse = await fetchData(endpoint);
+    final Map<String, dynamic> json = jsonDecode(stringResponse);
+    if (json['drinks'] != null) {
+      final categorias = <String>[];
+      for (var categoria in json['drinks']) {
+        categorias.add(categoria);
+      }
+      return categorias;
+    } else {
+      return [];
     }
   }
 }

@@ -28,10 +28,12 @@ class MiniaturaBebida extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4,),
-            Text(
-              bebida.nombre,
-              maxLines: 1,
-              style: Theme.of(context).textTheme.bodyMedium,
+            Center(
+              child: Text(
+                bebida.nombre,
+                maxLines: 1,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ],
         ),

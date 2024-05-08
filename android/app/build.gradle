@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.barman_assistant"
+    namespace "dev.jozese.barman_assistant"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

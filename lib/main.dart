@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+
 import 'grid_bebidas.dart';
 import 'package:flutter/material.dart';
 import 'bar.dart';
@@ -41,6 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<String> filters = <String>[];
   String _filter = 'Ingredient';
+
+
 
   @override
   void initState() {
@@ -134,28 +139,70 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
+
+
+    Column getOrientatedUI(BuildContext context, Orientation orientation)
+    {
+      if (orientation == Orientation.landscape)
+      {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 0, // Adjust the flex value as needed
+              child: filtros,
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 130,
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: ingredientes,
+                ),
+                Flexible(
+                  flex: 1,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: bebidas,
+                  ),
+                ),
+
+              ],
+            ),
+          ],
+        );
+      } else
+      {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 1, // Adjust the flex value as needed
+              child: ingredientes,
+            ),
+            Expanded(
+              flex: 0,
+              child: filtros,
+            ),
+            Expanded(
+              flex: 3, // Adjust the flex value as needed
+              child: bebidas,
+            ),
+          ],
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text(widget.title),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            flex: 1, // Adjust the flex value as needed
-            child: ingredientes,
-          ),
-          Expanded(
-            flex: 0,
-            child: filtros,
-          ),
-          Expanded(
-            flex: 3, // Adjust the flex value as needed
-            child: bebidas,
-          ),
-        ],
-      ),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return getOrientatedUI(context, orientation);
+        }
+      )
     );
   }
 }

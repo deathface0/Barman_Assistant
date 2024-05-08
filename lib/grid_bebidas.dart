@@ -15,7 +15,15 @@ class GridBebidas extends StatelessWidget {
     {
       return 1;
     } else {
-      return orientation == Orientation.portrait ? 2 : 4;
+      return orientation == Orientation.portrait ? 2 : 3;
+    }
+  }
+  Axis getScrollDirection(Orientation orientation)
+  {
+    if (isIngredient()) {
+      return orientation == Orientation.landscape ? Axis.horizontal : Axis.vertical;
+    } else {
+      return Axis.vertical;
     }
   }
 
@@ -24,7 +32,7 @@ class GridBebidas extends StatelessWidget {
     return OrientationBuilder(
       builder: (context, orientation) {
         return GridView.builder(
-          scrollDirection: isIngredient() ? Axis.horizontal : Axis.vertical,
+          scrollDirection: getScrollDirection(orientation),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: axisCount(isIngredient(), orientation),
             mainAxisExtent: 136,

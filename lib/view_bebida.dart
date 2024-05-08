@@ -19,11 +19,11 @@ class ViewBebida extends StatelessWidget {
           Row(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left: 10.0, top: 15.0), // Añadir relleno a la izquierda
+                  padding: EdgeInsets.only(left: 10.0, top: 15.0),
                   child: Image.network(
                     _bebida.urlImagen,
-                    width: 300, // Ajusta el ancho según sea necesario
-                    height: MediaQuery.of(context).size.height * 0.7, // Ajusta la altura según sea necesario
+                    width: 300,
+                    height: MediaQuery.of(context).size.height * 0.7,
                   ),
                 ),
                 Column(
@@ -31,16 +31,16 @@ class ViewBebida extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         _bebida.nombre,
-                        textAlign: TextAlign.justify, // Set text alignment to justify
+                        textAlign: TextAlign.justify,
                         style: const TextStyle(
-                          fontSize: 20, // Adjust the font size as needed
-                          fontWeight: FontWeight.bold, // Adjust the font weight as needed
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 20),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.55,
-                        height: MediaQuery.of(context).size.height * 0.6, // Limita la altura al 30% del tamaño de la pantalla
+                        height: MediaQuery.of(context).size.height * 0.6,
                         child: SingleChildScrollView(
                           child: Text(
                             _bebida.instrucciones,
@@ -66,37 +66,37 @@ class ViewBebida extends StatelessWidget {
           const SizedBox(height: 40),
           Image.network(
             _bebida.urlImagen,
-            width: 300, // Adjust the width as needed
-            height: 300, // Adjust the height as needed
+            width: 300,
+            height: 300,
           ),
-          const SizedBox(height: 20), // Add spacing between image and text
+          const SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Set left and right padding
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               _bebida.nombre,
-              textAlign: TextAlign.justify, // Set text alignment to justify
+              textAlign: TextAlign.justify,
               style: const TextStyle(
-                fontSize: 20, // Adjust the font size as needed
-                fontWeight: FontWeight.bold, // Adjust the font weight as needed
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          const SizedBox(height: 20), // Add spacing between image and text
+          const SizedBox(height: 20),
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0), // Set left and right padding
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.3, // Limita la altura al 30% del tamaño de la pantalla
-                child: SingleChildScrollView(
-                  child: Text(
-                    _bebida.instrucciones,
-                    textAlign: TextAlign.justify,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                    ),
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.3,
+              child: SingleChildScrollView(
+                child: Text(
+                  _bebida.instrucciones,
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               ),
+            ),
           ),
         ],
       );
@@ -113,7 +113,7 @@ class ViewBebida extends StatelessWidget {
             return  Center(
               child: Text('No se puede conectar con el servidor $nombre'),
             );
-          } else if (snapshot.hasData) { // Check if data is available
+          } else if (snapshot.hasData) {
             _bebida = snapshot.data;
             return OrientationBuilder(
                 builder: (context, orientation) {

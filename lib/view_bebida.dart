@@ -17,44 +17,44 @@ class ViewBebida extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Row(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 10.0, top: 15.0),
-                  child: Image.network(
-                    _bebida.urlImagen,
-                    width: 300,
-                    height: MediaQuery.of(context).size.height * 0.7,
-                  ),
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 10.0, top: 15.0),
+                child: Image.network(
+                  _bebida.urlImagen,
+                  width: 300,
+                  height: MediaQuery.of(context).size.height * 0.7,
                 ),
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        _bebida.nombre,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    _bebida.nombre,
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.55,
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: SingleChildScrollView(
+                      child: Text(
+                        _bebida.instrucciones,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.55,
-                        height: MediaQuery.of(context).size.height * 0.6,
-                        child: SingleChildScrollView(
-                          child: Text(
-                            _bebida.instrucciones,
-                            textAlign: TextAlign.justify,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                ),
-              ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       );
@@ -116,9 +116,9 @@ class ViewBebida extends StatelessWidget {
           } else if (snapshot.hasData) {
             _bebida = snapshot.data;
             return OrientationBuilder(
-                builder: (context, orientation) {
-                  return getOrientatedUI(context, orientation);
-                },
+              builder: (context, orientation) {
+                return getOrientatedUI(context, orientation);
+              },
             );
           } else {
             return const Center(child: Text('No hay datos disponibles'));
@@ -136,7 +136,7 @@ class ViewBebida extends StatelessWidget {
         title: Text(nombre),
       ),
       body: Center(
-        child: future
+          child: future
       ),
     );
   }

@@ -1,4 +1,4 @@
-package com.example.barman_assistant
+package com.example.dsm
 
 import io.flutter.embedding.android.FlutterActivity
 

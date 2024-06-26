@@ -23,7 +23,7 @@ class BarManager {
 
   Future<List<Bebida>> getBebidas(String ingrediente, String categoria) async {
     String endpoint = ingrediente != 'None' ? 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=$ingrediente' :
-                                              'https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=$categoria';
+    'https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=$categoria';
     final stringResponse = await fetchData(endpoint);
     final Map<String, dynamic> json = jsonDecode(stringResponse);
     if (json['drinks'] != null) {

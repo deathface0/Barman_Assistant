@@ -1,8 +1,8 @@
-import 'grid_bebidas.dart';
 import 'package:flutter/material.dart';
 import 'bar.dart';
 import 'view_bebida.dart';
 import 'bebida.dart';
+import 'ui_orientator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,169 +36,70 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Bebida> ingredients = <Bebida>[];
   String _selectedIngredient = 'Rum';
-  String _selectedDrink = 'None';
 
   List<String> filters = <String>[];
   String _filter = 'Ingredient';
 
-
+  String _selectedDrink = 'None';
 
   @override
   void initState() {
     super.initState();
+    BarManager.instance.getIngredientes().then((ingredientes) {
+      setState(() {
+        ingredients = ingredientes;
+      });
+    });
+
     BarManager.instance.getCategorias().then((categorias) {
       setState(() {
         categorias.insert(0, 'Ingredient');
         filters = categorias;
       });
     });
-
-    BarManager.instance.getIngredientes().then((ingredientes) {
-      setState(() {
-        ingredients = ingredientes;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final ingredientes = Center(
-      child: GridBebidas(
-        bebidas: ingredients,
-        onBebidaClicked: (nombre) {
-          setState(() {
-            _selectedIngredient = nombre;
-            _filter = 'Ingredient';
-          });
-        },
-      ),
-    );
-
-    final bebidas = FutureBuilder(
-      future: BarManager.instance.getBebidas(_selectedIngredient, _filter),
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('No se puede conectar con el servidor'),
-            );
-          } else if (snapshot.hasData) { // Check if data is available
-            return Center(
-              child: GridBebidas(
-                bebidas: snapshot.data,
-                onBebidaClicked: (nombre) {
-                  setState(() {
-                    _selectedDrink = nombre;
-
-                    // Navigate to the second page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewBebida(nombre: nombre),
-                      ),
-                    );
-                  });
-                },
-              ),
-            );
-          } else {
-            return const Center(child: Text('No hay datos disponibles'));
-          }
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-
-    final filtros = Center(
-      child: DropdownButton(
-        // Initial Value
-        value: _filter,
-        icon: const Icon(Icons.keyboard_arrow_down),
-        isExpanded: true,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        items: filters.map((String dropdownvalue) {
-          return DropdownMenuItem(
-            value: dropdownvalue,
-            child: Text(dropdownvalue),
-          );
-        }).toList(),
-        hint: const Text('Filter'),
-        onChanged: (String? newValue) {
-          setState(() {
-            if (newValue != 'Ingredient') {
-              _selectedIngredient = 'None';
-            }
-            _filter = newValue! != 'Ingredient' ? newValue! : _filter;
-          });
-        },
-      ),
-    );
-
-
-
-    Column getOrientatedUI(BuildContext context, Orientation orientation)
-    {
-      if (orientation == Orientation.landscape)
-      {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 0, // Adjust the flex value as needed
-              child: filtros,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 130,
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  child: ingredientes,
-                ),
-                Flexible(
-                  flex: 1,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: bebidas,
-                  ),
-                ),
-
-              ],
-            ),
-          ],
-        );
-      } else
-      {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 1, // Adjust the flex value as needed
-              child: ingredientes,
-            ),
-            Expanded(
-              flex: 0,
-              child: filtros,
-            ),
-            Expanded(
-              flex: 3, // Adjust the flex value as needed
-              child: bebidas,
-            ),
-          ],
-        );
-      }
-    }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: Text(widget.title),
-      ),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return getOrientatedUI(context, orientation);
-        }
-      )
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          title: Text(widget.title),
+        ),
+        body: UI_Orientator(
+          ingredients: ingredients,
+          filters: filters,
+          filter: _filter,
+          selectedIngredient: _selectedIngredient,
+          onIngredienteClicked: (nombre) {
+            setState(() {
+              _selectedIngredient = nombre!;
+              _filter = 'Ingredient';
+            });
+          },
+          onBebidaClicked: (nombre) {
+            setState(() {
+              _selectedDrink = nombre!;
+
+              // Navigate to the second page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewBebida(nombre: nombre),
+                ),
+              );
+            });
+          },
+          onFiltroClicked: (String? newValue) {
+            setState(() {
+              if (newValue != 'Ingredient') {
+                _selectedIngredient = 'None';
+              }
+              _filter = newValue! != 'Ingredient' ? newValue! : _filter;
+            });
+          },
+        ),
     );
   }
 }

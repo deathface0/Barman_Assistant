@@ -60,7 +60,7 @@ class BarManager {
       final Bebida bebida = Bebida.desdeJson(json['drinks'][0]);
       return bebida;
     } else {
-      return Bebida(id: '', nombre: '', urlImagen: '', instrucciones: '');
+      return Bebida(id: '', nombre: '', urlImagen: '', instruccionesEN: '', instruccionesES: '');
     }
   }
 

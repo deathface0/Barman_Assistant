@@ -22,6 +22,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String _selectedDrink = 'None';
 
+  final List<String> _languages = <String>['ES', 'EN'];
+  String _language = 'ES';
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +49,31 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text(widget.title),
+        actions: <Widget>[
+          DropdownButton(
+            // Initial Value
+            value: _language,
+            icon: const Icon(Icons.keyboard_arrow_down),
+            dropdownColor: Theme.of(context).colorScheme.secondary,
+            isExpanded: false,
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            items: _languages.map((String dropdownvalue) {
+              return DropdownMenuItem(
+                value: dropdownvalue,
+                child: Text(
+                  dropdownvalue,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            }).toList(),
+            hint: const Text('Idioma'),
+            onChanged: (String? newValue) {
+              setState(() {
+                _language = newValue!;
+              });
+            },
+          ),
+        ],
       ),
       body: UI_Orientator(
         ingredients: ingredients,
@@ -66,7 +94,17 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ViewBebida(nombre: nombre),
+                builder: (context) => ViewBebida(
+                  nombre: nombre,
+                  languages: _languages,
+                  initialLanguage: _language,
+                  onLanguageChanged: (String? lang)
+                  {
+                    setState(() {
+                      _language = lang!;
+                    });
+                  },
+                ),
               ),
             );
           });
